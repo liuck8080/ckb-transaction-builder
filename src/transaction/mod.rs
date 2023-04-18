@@ -6,6 +6,6 @@ pub struct TransactionWithScriptGroups {}
 
 #[derive(Copy, Clone, Debug, Eq, Hash, PartialEq)]
 pub enum Network {
-    Master,
-    Test,
+    Mainnet,
+    Testnet,
 }

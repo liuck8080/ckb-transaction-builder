@@ -1,6 +1,6 @@
-use super::{
-    handler::{HandlerContext, ScriptHandler, HandlerManager},
-    Network, TransactionWithScriptGroups,
+pub(crate) use super::{
+    handler::{HandlerContext, TransactionBuilderConfiguration},
+    TransactionWithScriptGroups,
 };
 
 pub trait TransactionBuilder {
@@ -8,24 +8,22 @@ pub trait TransactionBuilder {
 }
 
 pub struct SimpleTransactionBuilder {
-    network: Network,
+    configurataion: TransactionBuilderConfiguration,
 }
 
 impl SimpleTransactionBuilder {
-    pub fn new(network: Network) -> Self {
-        Self { network }
+    pub fn new(configurataion: TransactionBuilderConfiguration) -> Self {
+        Self { configurataion }
     }
 }
 
 impl TransactionBuilder for SimpleTransactionBuilder {
     fn build(&self, contexts: &[Box<dyn HandlerContext>]) -> TransactionWithScriptGroups {
         let script_group = super::ScriptGroup {};
-        if let Some(handlers) = HandlerManager::get(self.network) {
-            for handler in handlers.iter() {
-                for context in contexts {
-                    if let Ok(true) = handler.build_transaction(self, &script_group, context.as_ref()) {
-                        break;
-                    }
+        for handler in self.configurataion.get_script_handlers() {
+            for context in contexts {
+                if let Ok(true) = handler.build_transaction(self, &script_group, context.as_ref()) {
+                    break;
                 }
             }
         }

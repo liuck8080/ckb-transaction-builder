@@ -1,4 +1,4 @@
-use crate::transaction::{builder::TransactionBuilder, ScriptGroup};
+use crate::transaction::{builder::TransactionBuilder, ScriptGroup, Network};
 
 use super::{HandlerContext, ScriptHandler};
 
@@ -11,6 +11,9 @@ impl HandlerContext for Secp256k1Blake160SighashAllScriptContext {}
 impl Secp256k1Blake160SighashAllScriptHandler {
     pub fn is_match(&self, script_group: &ScriptGroup) -> bool {
         true
+    }
+    pub fn new_with_network(_network: Network)-> Self {
+        Self {}
     }
 }
 
